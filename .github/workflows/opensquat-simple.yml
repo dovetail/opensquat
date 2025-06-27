@@ -36,7 +36,7 @@ jobs:
         python opensquat.py -o results.json -t json --dns --phishing phishing_results.txt
 
     - name: Upload results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: opensquat-results
         path: |
