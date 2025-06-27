@@ -110,7 +110,7 @@ class Phishing:
                 self.phishing_db
                 )
             session = requests.session()
-            r = session.get(self.phishing_db, stream=True)
+            r = session.get(self.phishing_db, stream=True, timeout=30)
 
             # Get total file size in bytes from the request header
             total_size = int(r.headers.get("content-length", 0))
@@ -120,10 +120,9 @@ class Phishing:
             if total_size_mb == 0:
 
                 print(
-                    "[ERROR] File not found or empty! Contact the authors " +
-                    "or try again later. Exiting...\n",
+                    "[WARNING] Phishing database not accessible. Skipping phishing validation.\n",
                 )
-                exit(-1)
+                return False
 
             print("[*] Download volume:", total_size_mb, "MB")
 
@@ -135,9 +134,10 @@ class Phishing:
                 f.write(data)
             f.close()
 
-        except requests.exceptions.ConnectionError:
-            print("")
-            exit(-1)
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.RequestException) as e:
+            print(f"[WARNING] Could not download phishing database: {e}")
+            print("[WARNING] Skipping phishing validation.\n")
+            return False
 
         return True
 
@@ -149,12 +149,17 @@ class Phishing:
             keyword: keyword to search for(duh)
 
         Return:
-            none
+            list of phishing domains found
         """
         print("")
         print("+---------- Checking Phishing sites ----------+")
         time.sleep(2)
         self.set_keywords(keywords)
-        self.update_db()
+        
+        # Try to update the database, but continue if it fails
+        if not self.update_db():
+            print("[*] Phishing validation skipped due to database unavailability")
+            return []
+        
         self.count_keywords()
         return self.check_phishing()
