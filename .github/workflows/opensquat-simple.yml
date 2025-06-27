@@ -34,6 +34,7 @@ jobs:
     - name: Run openSquat scan
       env:
         DD_API_KEY: ${{ secrets.DD_API_KEY }}
+        DD_SITE: us3.datadoghq.com
       run: |
         python opensquat.py -o results.json -t json --dns --phishing phishing_results.txt || echo "Scan completed with warnings"
 

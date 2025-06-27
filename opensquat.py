@@ -38,6 +38,11 @@ def send_to_datadog_logs(args, summary_data):
         return
 
     configuration = Configuration()
+    
+    # Set the Datadog site if provided
+    if "DD_SITE" in os.environ:
+        configuration.server_variables["site"] = os.environ["DD_SITE"]
+    
     with ApiClient(configuration) as api_client:
         api_instance = LogsApi(api_client)
 
@@ -72,6 +77,11 @@ def send_to_datadog_metrics(args, summary_data):
         return
 
     configuration = Configuration()
+    
+    # Set the Datadog site if provided
+    if "DD_SITE" in os.environ:
+        configuration.server_variables["site"] = os.environ["DD_SITE"]
+    
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         
