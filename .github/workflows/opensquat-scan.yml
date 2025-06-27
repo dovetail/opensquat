@@ -107,7 +107,7 @@ jobs:
         $CMD
 
     - name: Upload scan results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: opensquat-results-${{ github.run_number }}
         path: |
