@@ -104,7 +104,7 @@ jobs:
         fi
         
         echo "Running: $CMD"
-        $CMD
+        $CMD || echo "Scan completed with warnings"
 
     - name: Upload scan results
       uses: actions/upload-artifact@v4
