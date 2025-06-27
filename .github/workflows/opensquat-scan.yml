@@ -77,6 +77,8 @@ jobs:
         DD_API_KEY: ${{ secrets.DD_API_KEY }}
 
     - name: Run openSquat scan
+      env:
+        DD_API_KEY: ${{ secrets.DD_API_KEY }}
       run: |
         # Build command with options
         CMD="python opensquat.py"
